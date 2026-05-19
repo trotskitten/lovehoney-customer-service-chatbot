@@ -1,0 +1,26 @@
+# Secrets
+.env
+.streamlit/secrets.toml
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local vector database
+chroma_db/
+
+# Local logs
+logs/conversations.csv
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
