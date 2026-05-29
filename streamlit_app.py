@@ -54,27 +54,22 @@ def main():
             backdrop-filter: blur(6px);
         }}
 
-        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) {{
-            background: rgba(91, 44, 111, 0.92);
-            color: #ffffff;
-        }}
-
-        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {{
+        [data-testid="stChatMessage"]:has([data-testid="stChatMessageContent"][aria-label="Chat message from user"]) {{
             background: rgba(255, 255, 255, 0.94);
             color: #17151c;
             border-color: rgba(91, 44, 111, 0.22);
         }}
 
-        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) p,
-        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) li,
-        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) span {{
-            color: #17151c;
+        [data-testid="stChatMessageContent"][aria-label="Chat message from user"],
+        [data-testid="stChatMessageContent"][aria-label="Chat message from user"] * {{
+            color: #17151c !important;
         }}
 
-        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) p,
-        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) li,
-        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) span {{
-            color: #ffffff;
+        [data-testid="stChatMessageContent"][aria-label*="assistant"],
+        [data-testid="stChatMessageContent"][aria-label*="assistant"] * {{
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            opacity: 1 !important;
         }}
         </style>
         <h1 class="rainbow-title">
