@@ -101,7 +101,8 @@ def main():
     if "messages" not in st.session_state:
         st.session_state["messages"] = []
     for message in st.session_state["messages"]:
-        with st.chat_message(message["role"]):
+        avatar = "chatbot_icon.jpeg" if message["role"] == "assistant" else None
+        with st.chat_message(message["role"], avatar=avatar):
             st.markdown(message["content"])
             if message.get("sources"):
                 st.caption("Sources")
@@ -125,7 +126,7 @@ def main():
     with st.chat_message("user"):
         st.markdown(user_query)
 
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar="chatbot_icon.jpeg"):
         try:
             with st.spinner("Thinking..."):
                 result = chatbot.handle_message(
