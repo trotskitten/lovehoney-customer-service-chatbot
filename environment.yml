@@ -10,11 +10,24 @@ dependencies:
   - pandas
   - numpy
   - python-dotenv
+  - certifi
+  - ipykernel
+  - notebook
+  - nbformat
+  - nbconvert
   - pip:
       - streamlit
       - langchain
       - langchain-openai
       - langchain-chroma
+      - langchain-text-splitters
+      - langchain-community
+      - langchain-classic
+      - langchain-mistralai
+      - langchain-tavily
       - chromadb
       - openai
+      - tavily-python
+      - langsmith
       - tiktoken
+      - truststore

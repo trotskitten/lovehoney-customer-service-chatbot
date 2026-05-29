@@ -13,9 +13,15 @@ env/
 
 # Jupyter
 .ipynb_checkpoints/
+*.ipynb
 
-# Local vector database
-chroma_db/
+# Tracked demo vector database
+# chroma_db/ is intentionally committed for Streamlit demo startup speed.
+
+# Local project artifacts
+data/
+docs/
+old/
 
 # Local logs
 logs/conversations.csv
@@ -24,3 +30,6 @@ logs/conversations.csv
 # OS files
 .DS_Store
 Thumbs.db
+
+
+
