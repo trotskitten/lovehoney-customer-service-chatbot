@@ -1,5 +1,6 @@
 # Secrets
 .env
+.env.example
 .streamlit/secrets.toml
 
 # Python cache files
@@ -20,10 +21,14 @@ env/
 
 # Local project artifacts
 data/
+prompts/
 docs/
 old/
+environment.yml
+requirements.txt
 
 # Local logs
+logs/
 logs/conversations.csv
 *.log
 
