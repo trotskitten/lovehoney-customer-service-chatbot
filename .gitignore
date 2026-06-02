@@ -24,8 +24,6 @@ data/
 prompts/
 docs/
 old/
-environment.yml
-requirements.txt
 
 # Local logs
 logs/

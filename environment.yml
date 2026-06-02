@@ -1,0 +1,33 @@
+name: rag-customer-service-chatbot
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.11
+  - pip
+  - pandas
+  - numpy
+  - python-dotenv
+  - certifi
+  - ipykernel
+  - notebook
+  - nbformat
+  - nbconvert
+  - pip:
+      - streamlit
+      - langchain
+      - langchain-openai
+      - langchain-chroma
+      - langchain-text-splitters
+      - langchain-community
+      - langchain-classic
+      - langchain-mistralai
+      - langchain-tavily
+      - chromadb
+      - openai
+      - tavily-python
+      - langsmith
+      - tiktoken
+      - truststore
