@@ -519,7 +519,7 @@ class ProductDiscoveryTool:
             metadata = doc.metadata or {}
             results.append({
                 "title": metadata.get("title", "Lovehoney product chunk"),
-                "url": "",
+                "url": metadata.get("url", ""),
                 "content": content,
                 "raw_content": content,
                 "score": relevance_score,

@@ -33,10 +33,18 @@ class CustomerServiceChatbot:
                                      include_raw_content="markdown"
                                      )
         
-        self.embedding_model = OpenAIEmbeddings(model="text-embedding-3-large")
+        self.embedding_model_name = os.getenv("EMBEDDING_MODEL", "text-embedding-3-large")
+        self.embedding_model = OpenAIEmbeddings(model=self.embedding_model_name)
+        self.chroma_db_dir = Path(os.getenv("CHROMA_DB_DIR", "chroma_db"))
+        if not self.chroma_db_dir.is_absolute():
+            self.chroma_db_dir = self.project_root / self.chroma_db_dir
+        self.chroma_collection_name = os.getenv(
+            "CHROMA_COLLECTION_NAME",
+            "products_chunks",
+        )
         self.vector_store = Chroma(
-            collection_name="langchain",
-            persist_directory=str(self.project_root / "chroma_db"),
+            collection_name=self.chroma_collection_name,
+            persist_directory=str(self.chroma_db_dir),
             embedding_function=self.embedding_model,
         )
 

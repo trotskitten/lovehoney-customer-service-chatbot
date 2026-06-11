@@ -86,34 +86,39 @@ The app uses a hybrid retrieval design:
 
 ## Building The Chroma Knowledge Base
 
-The local Chroma database was built as a separate knowledge-processing pipeline before the Streamlit app runs. The diagram titled **Building the Chroma Knowledge Base** summarizes this build process: raw public website data is discovered, extracted, cleaned, embedded, and stored for semantic retrieval.
+The local Chroma database is built before the Streamlit app runs. Its source corpus comes from public Lovehoney.eu product pages: 197 product URLs were retrieved with Tavily Extract and consolidated into a Markdown-style product-page corpus. Each source block contains the product title, source URL, page text, feature bullets, descriptions, category breadcrumbs, specifications, measurements, material details, power details where available, and other product attributes copied from the public page.
 
 ```text
-Raw website content
-  -> Tavily discovery and extraction
-  -> data cleaning
+197 product URLs
+  -> Tavily Extract product-page Markdown
+  -> source-block parsing
+  -> product-text cleaning
+  -> product-aware chunking
   -> OpenAI text-embedding-3-large embeddings
-  -> ChromaDB vector database
+  -> persisted ChromaDB collection
 ```
 
-The build process followed these steps:
+The build workflow is:
 
-1. **Product URL discovery**
-   Public Lovehoney.eu product-page URLs were identified using Tavily Map-style discovery. This created the candidate product-page list used for retrieval preparation.
+1. **Retrieve product-page content**
+   Tavily Extract is run against the 197 public product URLs. The output is treated as a raw source corpus, not as final chatbot-ready text.
 
-2. **Product page extraction**
-   Product-page content was retrieved with Tavily Extract. The extracted raw website information included page text, product descriptions, and product characteristics from public pages.
+2. **Parse each product source block**
+   Each extracted product page is read as an individual source. The build process keeps the product title and URL, then identifies useful product sections such as key features, descriptions, specifications, measurements, material, waterproofing, power type, category, and subcategory.
 
-3. **Data cleaning**
-   The raw extracted content was cleaned before embedding. Navigation text, metadata, duplicate content, and irrelevant boilerplate were removed where possible so the knowledge base focused on meaningful product information.
+3. **Clean the extracted page text**
+   Website boilerplate is removed before embedding. This includes navigation links, cookie and country-selector text, repeated product headings, review scaffolding, "customers also buy" sections, footer content, duplicate fragments, and other page chrome. The cleaned text keeps the product facts that are useful for semantic matching.
 
-4. **Embedding generation**
-   Cleaned product descriptions were converted into semantic vectors using OpenAI `text-embedding-3-large`. This embedding model produces the vector representation used by ChromaDB for similarity search.
+4. **Create product-aware chunks**
+   Cleaned product content is split into retrievable chunks. A product may produce more than one chunk when its useful text is long. Each chunk keeps metadata such as source ID, chunk index, product title, URL, category, subcategory, and source path so retrieved context can still be traced back to the original product page.
 
-5. **Vector storage in ChromaDB**
-   The embedded product records were stored in the persisted local `chroma_db/` directory. The current app expects the `langchain` Chroma collection and uses the same `text-embedding-3-large` model at runtime so query vectors match the stored product vectors.
+5. **Generate embeddings**
+   Each cleaned chunk is embedded with OpenAI `text-embedding-3-large`. The same embedding model is used later by the app when user preferences are converted into semantic search queries.
 
-In the current demo setup, the Chroma knowledge base contains 197 embedded product/context records. At runtime, the chatbot does not rebuild this database; it loads `chroma_db/`, embeds the user's preference query, and retrieves the closest matching records to ground the next discovery question.
+6. **Persist chunks in ChromaDB**
+   The embedded chunks and their metadata are stored in the local `chroma_db/` directory under the `products_chunks` collection. The current demo database contains 432 embedded chunks derived from the 197 extracted product pages.
+
+At runtime, the chatbot does not rebuild this knowledge base. It loads `chroma_db/`, embeds the user's accumulated preference query with `text-embedding-3-large`, searches the `products_chunks` collection, and uses the closest product chunks to ground the next discovery question.
 
 ## Workflow Explanation
 
@@ -128,7 +133,7 @@ In the current demo setup, the Chroma knowledge base contains 197 embedded produ
 The active vector-store configuration expects:
 
 - Persist directory: `chroma_db/`
-- Collection name: `langchain`
+- Collection name: `products_chunks`
 - Embedding model: `text-embedding-3-large`
 
 ### 3. Guided discovery
@@ -304,4 +309,3 @@ Open the URL in a browser and answer the product-discovery questions.
 - Add a small admin/reporting view to inspect retrieval outcomes and identify weak product categories.
 - Add SQL-backed analytics for product-discovery patterns and user preference trends.
 - Add CI checks for formatting, tests, and dependency health.
-
